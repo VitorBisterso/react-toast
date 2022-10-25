@@ -1,0 +1,12 @@
+.button {
+   cursor: pointer;
+   background-color: transparent;
+   padding: 5px 10px;
+   text-transform: uppercase;
+   border: 1px solid #000;
+   border-radius: 5px;
+}
+
+.button:hover {
+   transform: scale(0.98);
+}
