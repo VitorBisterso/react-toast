@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import Button from '../Button';
-import { ToastContext, ToastContextType } from '../ToastProvider';
+import { useToast } from '../ToastProvider';
 
 import './styles.css';
 
 export default function ButtonList() {
-   const Toast = useContext(ToastContext) as ToastContextType;
+   const Toast = useToast();
 
    return (
       <div className="buttonContainer">

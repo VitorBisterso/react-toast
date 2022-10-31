@@ -1,6 +1,7 @@
 import React, {
    ReactElement,
    useCallback,
+   useContext,
    useEffect,
    useMemo,
    useState,
@@ -9,13 +10,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 import './styles.css';
 
-export type ToastContextType = {
+type ToastContextType = {
    success: (message: string) => void;
    danger: (message: string) => void;
    info: (message: string) => void;
    warning: (message: string) => void;
 };
-export const ToastContext = React.createContext<ToastContextType | null>(null);
+const ToastContext = React.createContext<ToastContextType | null>(null);
 
 type ToastType = 'success' | 'danger' | 'info' | 'warning';
 type ToastModel = {
@@ -119,3 +120,5 @@ export default function ToastProvider({
       </ToastContext.Provider>
    );
 }
+
+export const useToast = () => useContext(ToastContext) as ToastContextType;
