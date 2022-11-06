@@ -2,19 +2,19 @@ import React, {
    ReactElement,
    useCallback,
    useContext,
-   useEffect,
    useMemo,
    useState,
 } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import './styles.css';
+import Toast from './Toast';
 
 type ToastContextType = {
-   success: (message: string) => void;
-   danger: (message: string) => void;
-   info: (message: string) => void;
-   warning: (message: string) => void;
+   success: (message: string, timeout?: number) => void;
+   danger: (message: string, timeout?: number) => void;
+   info: (message: string, timeout?: number) => void;
+   warning: (message: string, timeout?: number) => void;
 };
 const ToastContext = React.createContext<ToastContextType | null>(null);
 
@@ -22,6 +22,7 @@ type ToastType = 'success' | 'danger' | 'info' | 'warning';
 type ToastModel = {
    id: string;
    message: string;
+   timeout: number;
    type: ToastType;
 };
 
@@ -32,6 +33,8 @@ const ToastColor = {
    warning: '#fd7e14',
 };
 
+const DEFAULT_TIMEOUT = 3000;
+
 export default function ToastProvider({
    children,
 }: {
@@ -40,36 +43,36 @@ export default function ToastProvider({
    const [list, setList] = useState([] as Array<ToastModel>);
 
    const addToast = useCallback(
-      (message: string, type: ToastType) => {
-         setList([...list, { id: uuidv4(), message, type }]);
+      (message: string, timeout: number, type: ToastType) => {
+         setList([...list, { id: uuidv4(), message, timeout, type }]);
       },
       [list, setList]
    );
 
    const success = useCallback(
-      (message: string) => {
-         addToast(message, 'success');
+      (message: string, timeout?: number) => {
+         addToast(message, timeout || DEFAULT_TIMEOUT, 'success');
       },
       [addToast]
    );
 
    const danger = useCallback(
-      (message: string) => {
-         addToast(message, 'danger');
+      (message: string, timeout?: number) => {
+         addToast(message, timeout || DEFAULT_TIMEOUT, 'danger');
       },
       [addToast]
    );
 
    const info = useCallback(
-      (message: string) => {
-         addToast(message, 'info');
+      (message: string, timeout?: number) => {
+         addToast(message, timeout || DEFAULT_TIMEOUT, 'info');
       },
       [addToast]
    );
 
    const warning = useCallback(
-      (message: string) => {
-         addToast(message, 'warning');
+      (message: string, timeout?: number) => {
+         addToast(message, timeout || DEFAULT_TIMEOUT, 'warning');
       },
       [addToast]
    );
@@ -81,18 +84,6 @@ export default function ToastProvider({
       [list, setList]
    );
 
-   useEffect(() => {
-      const interval = setInterval(() => {
-         if (list.length > 0) {
-            deleteToast(list[0].id);
-         }
-      }, 3000);
-
-      return () => {
-         clearInterval(interval);
-      };
-   }, [list, deleteToast]);
-
    const providerValue = useMemo(
       () => ({ success, danger, info, warning }),
       [success, danger, info, warning]
@@ -102,19 +93,14 @@ export default function ToastProvider({
          {children}
          <div className="container bottom-right">
             {list.map(toast => (
-               <div
+               <Toast
                   key={toast.id}
-                  className="notification toast bottom-right"
-                  style={{ backgroundColor: ToastColor[toast.type] }}
-               >
-                  <button onClick={() => deleteToast(toast.id)} type="button">
-                     X
-                  </button>
-                  <div>
-                     <p className="title">{toast.type}</p>
-                     <p className="message">{toast.message}</p>
-                  </div>
-               </div>
+                  color={ToastColor[toast.type]}
+                  onClick={() => deleteToast(toast.id)}
+                  title={toast.type}
+                  message={toast.message}
+                  timeout={toast.timeout}
+               />
             ))}
          </div>
       </ToastContext.Provider>
