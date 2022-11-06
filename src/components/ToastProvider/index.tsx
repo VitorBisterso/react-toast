@@ -92,14 +92,14 @@ export default function ToastProvider({
       <ToastContext.Provider value={providerValue}>
          {children}
          <div className="container bottom-right">
-            {list.map(toast => (
+            {list.map(({ id, type, message, timeout }) => (
                <Toast
-                  key={toast.id}
-                  color={ToastColor[toast.type]}
-                  onClick={() => deleteToast(toast.id)}
-                  title={toast.type}
-                  message={toast.message}
-                  timeout={toast.timeout}
+                  key={id}
+                  color={ToastColor[type]}
+                  onClick={() => deleteToast(id)}
+                  title={type}
+                  message={message}
+                  timeout={timeout}
                />
             ))}
          </div>
