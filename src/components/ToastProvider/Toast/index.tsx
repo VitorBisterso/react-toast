@@ -41,6 +41,7 @@ export default function Toast({
       <Expire timeout={timeout}>
          <div
             className="notification toast bottom-right"
+            data-testid="toast-container"
             style={{ backgroundColor: color }}
          >
             <button onClick={onClick} type="button">

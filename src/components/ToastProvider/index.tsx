@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import './styles.css';
 import Toast from './Toast';
 
-type ToastContextType = {
+export type ToastContextType = {
    success: (message: string, timeout?: number) => void;
    danger: (message: string, timeout?: number) => void;
    info: (message: string, timeout?: number) => void;
@@ -26,14 +26,14 @@ type ToastModel = {
    type: ToastType;
 };
 
-const ToastColor = {
+export const ToastColor = {
    success: '#198754',
    danger: '#dc3545',
    info: '#0d6efd',
    warning: '#fd7e14',
 };
 
-const DEFAULT_TIMEOUT = 3000;
+export const DEFAULT_TIMEOUT = 3000;
 
 export default function ToastProvider({
    children,
@@ -51,28 +51,28 @@ export default function ToastProvider({
 
    const success = useCallback(
       (message: string, timeout?: number) => {
-         addToast(message, timeout || DEFAULT_TIMEOUT, 'success');
+         addToast(message, timeout ?? DEFAULT_TIMEOUT, 'success');
       },
       [addToast]
    );
 
    const danger = useCallback(
       (message: string, timeout?: number) => {
-         addToast(message, timeout || DEFAULT_TIMEOUT, 'danger');
+         addToast(message, timeout ?? DEFAULT_TIMEOUT, 'danger');
       },
       [addToast]
    );
 
    const info = useCallback(
       (message: string, timeout?: number) => {
-         addToast(message, timeout || DEFAULT_TIMEOUT, 'info');
+         addToast(message, timeout ?? DEFAULT_TIMEOUT, 'info');
       },
       [addToast]
    );
 
    const warning = useCallback(
       (message: string, timeout?: number) => {
-         addToast(message, timeout || DEFAULT_TIMEOUT, 'warning');
+         addToast(message, timeout ?? DEFAULT_TIMEOUT, 'warning');
       },
       [addToast]
    );
